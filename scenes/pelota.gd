@@ -2,6 +2,7 @@ extends RigidBody2D
 
 # Fuerza de movimiento
 @export var fuerza: float = 500.0
+@export var velocidad_giro: float = 3.0  # Ajusta este valor si gira muy rápido o muy lento
 
 # Nombres de las acciones en el Input Map
 @export var accion_arriba: String = "move_up"
@@ -31,28 +32,29 @@ func _ready():
 		linea_rastro.top_level = true
 		linea_rastro.clear_points()
 
-func _physics_process(_delta):
-	# --- MOVIMIENTO ---
-	var direccion = Vector2.ZERO
-
+func _physics_process(delta):
+	# --- 1. ROTACIÓN (Usando velocidad angular para la física) ---
+	var rotacion_input = 0.0
 	if Input.is_action_pressed(accion_derecha):
-		direccion.x += 1
+		rotacion_input += 1.0
 	if Input.is_action_pressed(accion_izquierda):
-		direccion.x -= 1
-	if Input.is_action_pressed(accion_abajo):
-		direccion.y += 1
+		rotacion_input -= 1.0
+
+	# Aplicamos velocidad angular directamente (en radianes por segundo)
+	# Esto permite que la física mantenga el ángulo actual cuando sueltas el botón
+	angular_velocity = rotacion_input * velocidad_giro
+
+	# --- 2. AVANCE Y RETROCESO ---
+	var avance_input = 0.0
 	if Input.is_action_pressed(accion_arriba):
-		direccion.y -= 1
+		avance_input += 1.0
+	if Input.is_action_pressed(accion_abajo):
+		avance_input -= 1.0
 
-	direccion = direccion.normalized()
-	apply_force(direccion * fuerza)
+	# Usamos transform.x (el vector que apunta hacia adelante)
+	var direccion_avance = transform.x * avance_input
+	apply_force(direccion_avance * fuerza)
 
-	# --- ROTACIÓN SEGÚN EL VECTOR DE DESPLAZAMIENTO REAL ---
-	# Comprobamos si la pelota se está moviendo realmente en el espacio (velocidad > 10)
-	# para evitar que gire por imprecisiones decimales cuando está casi quieta.
-	if linear_velocity.length() > 10.0:
-		rotation = linear_velocity.angle()
-		
 	# --- ACTUALIZAR COLOR ---
 	actualizar_color_por_posicion()
 	
