@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://ca4ft384vdkyt"]
+
+[ext_resource type="PackedScene" uid="uid://48om4f3ch2v1" path="res://scenes/pelota.tscn" id="1_x4n2o"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_x4n2o"]
+bounce = 1.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_x4n2o"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_uc3sl"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2ka1k"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_pew7j"]
+distance = 2.0
+
+[node name="Node2D" type="Node2D" unique_id=1032848023]
+
+[node name="pelota" parent="." unique_id=1418210567 instance=ExtResource("1_x4n2o")]
+position = Vector2(625, 342)
+
+[node name="pelota2" parent="." unique_id=1802369243 instance=ExtResource("1_x4n2o")]
+position = Vector2(420, 275)
+accion_arriba = "p2_move_up"
+accion_abajo = "p2_move_down"
+accion_izquierda = "p2_move_left"
+accion_derecha = "p2_move_right"
+
+[node name="walls" type="StaticBody2D" parent="." unique_id=342405513]
+physics_material_override = SubResource("PhysicsMaterial_x4n2o")
+
+[node name="down" type="CollisionShape2D" parent="walls" unique_id=1991995216]
+position = Vector2(1153, 649)
+shape = SubResource("WorldBoundaryShape2D_x4n2o")
+
+[node name="up" type="CollisionShape2D" parent="walls" unique_id=599380203]
+rotation = 3.1415927
+shape = SubResource("WorldBoundaryShape2D_uc3sl")
+
+[node name="left" type="CollisionShape2D" parent="walls" unique_id=209887858]
+position = Vector2(1.0000076, 641.99994)
+rotation = 1.5707964
+shape = SubResource("WorldBoundaryShape2D_2ka1k")
+
+[node name="right" type="CollisionShape2D" parent="walls" unique_id=1174910458]
+position = Vector2(1155, -1)
+rotation = -1.5707964
+shape = SubResource("WorldBoundaryShape2D_pew7j")
