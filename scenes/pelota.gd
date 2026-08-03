@@ -9,19 +9,25 @@ extends RigidBody2D
 @export var accion_abajo: String = "move_down"
 @export var accion_izquierda: String = "move_left"
 @export var accion_derecha: String = "move_right"
+@export var accion_disparar: String = "shoot" # Nueva acción
+
+# Cargar la escena de la bala
+@export var escena_bala: PackedScene = preload("res://scenes/bala.tscn")
 
 # --- VARIABLES PARA EL COLOR ---
 # Referencia al viewport para saber el tamaño de la pantalla
 var tamano_pantalla: Vector2
 
+
+# --- VARIABLES PARA EL RASTRO ---
 # Definimos los colores base
 var color_izquierda = Color.BLACK
 var color_derecha = Color.WHITE
-
-# --- VARIABLES PARA EL RASTRO ---
 @export var max_puntos_rastro: int = 50
 @onready var linea_rastro = $Rastros/RastroColores
 # --------------------------------
+
+@onready var punta_canon = $pistola
 
 func _ready():
 	# Obtenemos el tamaño de la ventana de juego al iniciar
@@ -54,6 +60,10 @@ func _physics_process(delta):
 	# Usamos transform.x (el vector que apunta hacia adelante)
 	var direccion_avance = transform.x * avance_input
 	apply_force(direccion_avance * fuerza)
+	
+	# --- DISPARO ---
+	if Input.is_action_just_pressed(accion_disparar):
+		disparar_bala()
 
 	# --- ACTUALIZAR COLOR ---
 	actualizar_color_por_posicion()
@@ -61,6 +71,18 @@ func _physics_process(delta):
 	# --- ACTUALIZAR RASTRO ---
 	actualizar_rastro()
 
+func disparar_bala():
+	if escena_bala and punta_canon:
+		# 1. Crear una instancia de la bala
+		var nueva_bala = escena_bala.instantiate()
+		
+		# 2. Colocar la bala en la posición y rotación actual de la punta del cañón
+		nueva_bala.global_position = punta_canon.global_position
+		nueva_bala.global_rotation = punta_canon.global_rotation
+		
+		# 3. Añadir la bala al árbol del mapa (al nodo raíz/escena principal)
+		get_tree().current_scene.add_child(nueva_bala)
+		
 # Función que calcula y aplica el color según la posición
 func actualizar_color_por_posicion():
 	# 1. Calculamos la posición X relativa (de 0.0 a 1.0)

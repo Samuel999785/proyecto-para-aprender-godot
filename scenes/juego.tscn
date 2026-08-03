@@ -25,6 +25,7 @@ accion_arriba = "p2_move_up"
 accion_abajo = "p2_move_down"
 accion_izquierda = "p2_move_left"
 accion_derecha = "p2_move_right"
+accion_disparar = "p2_shoot"
 
 [node name="walls" type="StaticBody2D" parent="." unique_id=342405513]
 physics_material_override = SubResource("PhysicsMaterial_x4n2o")

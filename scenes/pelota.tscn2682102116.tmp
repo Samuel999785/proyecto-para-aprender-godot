@@ -38,6 +38,12 @@ physics_material_override = SubResource("PhysicsMaterial_oq35t")
 gravity_scale = 0.0
 script = ExtResource("1_oq35t")
 fuerza = 300.0
+velocidad_giro = null
+accion_arriba = null
+accion_abajo = null
+accion_izquierda = null
+accion_derecha = null
+max_puntos_rastro = null
 
 [node name="circulo" type="Sprite2D" parent="." unique_id=1722873999]
 scale = Vector2(2, 2)
